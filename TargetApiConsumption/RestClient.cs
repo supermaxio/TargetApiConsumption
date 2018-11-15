@@ -1,5 +1,5 @@
 ﻿/***************************************************************************/
-// <copyright file="RestClient.cs" company="Target recruiting">
+// <copyright file="RestClient.cs" company="my company">
 //     MyCompany.com. All rights reserved.
 // </copyright>
 // <author>M. Meier</author>
@@ -10,6 +10,7 @@ namespace TargetApiConsumption
     using System;
     using System.IO;
     using System.Net;
+    using System.Text;
 
     /// <summary>
     /// Rest client.
@@ -39,24 +40,34 @@ namespace TargetApiConsumption
 
         public string MakeRequest()
         {
-            var stringToReturn = string.Empty;
+            var responseString = string.Empty;
 
             var request = (HttpWebRequest)WebRequest.Create(this.EndPoint);
             request.Method = HttpMethod.ToString();
+            request.ContentType = "application/json; charset=utf-8";
 
             // Check if can connect
-            using(var response = (HttpWebResponse)request.GetResponse())
+            using (var response = (HttpWebResponse)request.GetResponse())
             {
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    throw new ApplicationException("Web Server returned status code: " + response.StatusCode.ToString())
+                    throw new ApplicationException("Web Server returned status code: " + response.StatusCode.ToString());
                 }
 
-                // Figure out stream type
-                using ()
+                // Start stream and process it
+                using (var responseStream = response.GetResponseStream())
+                {
+                    if (responseStream != null)
+                    {
+                        using (var streamReader = new StreamReader(responseStream, Encoding.UTF8))
+                        {
+                            responseString = streamReader.ReadToEnd();
+                        }
+                    }
+                }
             }
 
-            return stringToReturn;
+            return responseString;
         }
 
         /// <summary>
