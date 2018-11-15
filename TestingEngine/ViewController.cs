@@ -2,6 +2,7 @@
 
 using AppKit;
 using Foundation;
+using CoreBusiness;
 
 namespace TestingEngine
 {
@@ -28,6 +29,34 @@ namespace TestingEngine
             {
                 base.RepresentedObject = value;
                 // Update the view, if already loaded.
+            }
+        }
+
+        partial void RunTestButton(NSObject sender)
+        {
+            try
+            {
+                var nextBus = new NextBusOperation();
+                var timeInMinutes = nextBus.GetTimeInMinutesForNextBus("METRO Blue Line", "Target Field Station Platform 1", "south");
+
+                // Output
+                var stringToDisplay = "Test succeeds with output: " + timeInMinutes;
+
+                Console.WriteLine(stringToDisplay);
+                OutputText.StringValue = stringToDisplay;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                OutputText.StringValue = "Error";
+
+                var alert = new NSAlert
+                {
+                    MessageText = "Error",
+                    InformativeText = "Test failed. " + ex.Message
+                };
+
+                alert.RunModal();
             }
         }
     }
