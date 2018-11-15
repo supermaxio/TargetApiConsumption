@@ -26,6 +26,16 @@ namespace CoreBusiness
         public int GetTimeInMinutesForNextBus(string routeInput, string stopInput, string directionInput)
         {
             // Check for validity
+            if (string.IsNullOrWhiteSpace(routeInput))
+            {
+                throw new ApplicationException("Bus route name cannot be empty");
+            }
+
+            if (string.IsNullOrWhiteSpace(stopInput))
+            {
+                throw new ApplicationException("Bus stop name cannot be empty");
+            }
+
             switch (directionInput)
             {
                 case "east":
@@ -56,7 +66,7 @@ namespace CoreBusiness
             // Check if any routes match input
             foreach (var routeDictionary in routes)
             {
-                if (routeDictionary["Description"].ToLower() == routeInput.ToLower())
+                if (routeDictionary["Description"].ToLower().Contains(routeInput.ToLower()))
                 {
                     routeIdentifier = routeDictionary["Route"];
                     break;
@@ -109,6 +119,11 @@ namespace CoreBusiness
 
             // Get info next
             var info = restMetro.GetInfoForRouteAndDirectionAndStop(routeIdentifier, directionIndentifier, stopIdentifier);
+            if (info.Count <= 0)
+            {
+                throw new ApplicationException("There are no scheduled stops here");
+            }
+
             var firstInfo = info.FirstOrDefault();
             var dateTimeForBus = JsonConvert.DeserializeObject<DateTime>(this.WrapStringInQuotes(firstInfo["DepartureTime"]));
             var timeUntilNextBus = dateTimeForBus - DateTime.Now;
