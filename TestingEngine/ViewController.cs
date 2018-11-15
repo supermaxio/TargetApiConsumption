@@ -59,5 +59,56 @@ namespace TestingEngine
                 alert.RunModal();
             }
         }
+
+        partial void RunTest2Button(NSObject sender)
+        {
+            try
+            {
+                var nextBus = new NextBusOperation();
+                var timeInMinutes = nextBus.GetTimeInMinutesForNextBus("Express - Target - Hwy 252 and 73rd Av P&R - Mpls", "Target North Campus Building F", "south");
+
+                // Output
+                var stringToDisplay = "Test succeeds with output: " + timeInMinutes;
+
+                Console.WriteLine(stringToDisplay);
+                Output2Text.StringValue = stringToDisplay;
+            }
+            catch (ApplicationException ex)
+            {
+                if (ex.Message.Contains("There are no scheduled stops here"))
+                {
+                    var stringToDisplay = "Test succeeds: no scheduled stops";
+
+                    Console.WriteLine(stringToDisplay);
+                    Output2Text.StringValue = stringToDisplay;
+                }
+                else
+                {
+                    Console.WriteLine(ex.Message);
+                    Output2Text.StringValue = "Error";
+
+                    var alert = new NSAlert
+                    {
+                        MessageText = "Error",
+                        InformativeText = "Test failed. " + ex.Message
+                    };
+
+                    alert.RunModal();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Output2Text.StringValue = "Error";
+
+                var alert = new NSAlert
+                {
+                    MessageText = "Error",
+                    InformativeText = "Test failed. " + ex.Message
+                };
+
+                alert.RunModal();
+            }
+        }
     }
 }

@@ -13,7 +13,13 @@ namespace TestingEngine
     partial class ViewController
     {
         [Outlet]
+        AppKit.NSTextField Output2Text { get; set; }
+
+        [Outlet]
         AppKit.NSTextField OutputText { get; set; }
+
+        [Action ("RunTest2Button:")]
+        partial void RunTest2Button (Foundation.NSObject sender);
 
         [Action ("RunTestButton:")]
         partial void RunTestButton (Foundation.NSObject sender);
@@ -23,6 +29,11 @@ namespace TestingEngine
             if (OutputText != null) {
                 OutputText.Dispose ();
                 OutputText = null;
+            }
+
+            if (Output2Text != null) {
+                Output2Text.Dispose ();
+                Output2Text = null;
             }
         }
     }
