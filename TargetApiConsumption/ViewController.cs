@@ -11,6 +11,7 @@ namespace TargetApiConsumption
     using System.IO;
     using AppKit;
     using Foundation;
+    using CoreBusiness;
 
     /// <summary>
     /// View controller.
@@ -66,7 +67,7 @@ namespace TargetApiConsumption
                 var busRouteValue = BusRouteTextBox.StringValue;
 
                 // Run business logic
-                var nextBus = new NextBus();
+                var nextBus = new NextBusOperation();
                 var timeInMinutes = nextBus.GetTimeInMinutesForNextBus(busRouteValue, busStopValue, busDirectionValue);
                 var stringToDisplay = timeInMinutes.ToString() + " minutes";
 

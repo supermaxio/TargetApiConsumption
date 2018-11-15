@@ -5,7 +5,7 @@
 // <author>M. Meier</author>
 /***************************************************************************/
 
-namespace TargetApiConsumption
+namespace CoreBusiness
 {
     using System;
     using System.IO;
@@ -15,7 +15,7 @@ namespace TargetApiConsumption
     /// <summary>
     /// Rest client.
     /// </summary>
-    public class RestClient
+    internal class RestClient
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="T:TargetApiConsumption.RestClient"/> class.
